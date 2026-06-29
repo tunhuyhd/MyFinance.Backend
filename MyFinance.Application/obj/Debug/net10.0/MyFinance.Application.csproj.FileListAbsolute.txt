@@ -1,0 +1,15 @@
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\bin\Debug\net10.0\MyFinance.Application.deps.json
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\bin\Debug\net10.0\MyFinance.Application.dll
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\bin\Debug\net10.0\MyFinance.Application.pdb
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\bin\Debug\net10.0\MyFinance.Domain.dll
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\bin\Debug\net10.0\MyFinance.Domain.pdb
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\obj\Debug\net10.0\MyFinance.Application.csproj.AssemblyReference.cache
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\obj\Debug\net10.0\MyFinance.Application.GeneratedMSBuildEditorConfig.editorconfig
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\obj\Debug\net10.0\MyFinance.Application.AssemblyInfoInputs.cache
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\obj\Debug\net10.0\MyFinance.Application.AssemblyInfo.cs
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\obj\Debug\net10.0\MyFinance.Application.csproj.CoreCompileInputs.cache
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\obj\Debug\net10.0\MyFinanc.B5889575.Up2Date
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\obj\Debug\net10.0\MyFinance.Application.dll
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\obj\Debug\net10.0\refint\MyFinance.Application.dll
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\obj\Debug\net10.0\MyFinance.Application.pdb
+G:\Project-2026\MyFinance\MyFinance.Backend\MyFinance.Application\obj\Debug\net10.0\ref\MyFinance.Application.dll
