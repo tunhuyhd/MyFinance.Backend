@@ -116,6 +116,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             new Category { Id = Guid.Parse("10000001-0000-0000-0000-000000000006"), Name = "Giáo dục", Type = CategoryType.Expense, Icon = "book-open", Color = "#06B6D4", IsSystem = true, CreatedBy = Guid.Empty, CreatedOn = fixedDate },
             new Category { Id = Guid.Parse("10000001-0000-0000-0000-000000000007"), Name = "Hóa đơn", Type = CategoryType.Expense, Icon = "receipt", Color = "#64748B", IsSystem = true, CreatedBy = Guid.Empty, CreatedOn = fixedDate },
             new Category { Id = Guid.Parse("10000001-0000-0000-0000-000000000008"), Name = "Khác", Type = CategoryType.Expense, Icon = "more-horizontal", Color = "#6B7280", IsSystem = true, CreatedBy = Guid.Empty, CreatedOn = fixedDate },
+            new Category { Id = Guid.Parse("10000001-0000-0000-0000-000000000009"), Name = "Rút tiền", Type = CategoryType.Expense, Icon = "banknote", Color = "#14B8A6", IsSystem = true, CreatedBy = Guid.Empty, CreatedOn = fixedDate },
             // Income categories
             new Category { Id = Guid.Parse("20000001-0000-0000-0000-000000000001"), Name = "Lương", Type = CategoryType.Income, Icon = "briefcase", Color = "#10B981", IsSystem = true, CreatedBy = Guid.Empty, CreatedOn = fixedDate },
             new Category { Id = Guid.Parse("20000001-0000-0000-0000-000000000002"), Name = "Đầu tư", Type = CategoryType.Income, Icon = "trending-up", Color = "#059669", IsSystem = true, CreatedBy = Guid.Empty, CreatedOn = fixedDate },
