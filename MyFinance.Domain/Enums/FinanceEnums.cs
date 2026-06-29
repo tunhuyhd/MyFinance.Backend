@@ -13,7 +13,8 @@ public enum AccountType
     Savings = 2,
     Cash = 3,
     CreditCard = 4,
-    Investment = 5
+    Investment = 5,
+    EWallet = 6
 }
 
 public enum CategoryType
