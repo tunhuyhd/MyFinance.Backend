@@ -1,6 +1,0 @@
-<Solution>
-  <Project Path="MyFinance.Application/MyFinance.Application.csproj" />
-  <Project Path="MyFinance.Domain/MyFinance.Domain.csproj" />
-  <Project Path="MyFinance.Infrastructure/MyFinance.Infrastructure.csproj" />
-  <Project Path="MyFinance.WebApi/MyFinance.WebApi.csproj" />
-</Solution>
