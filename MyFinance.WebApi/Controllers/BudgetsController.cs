@@ -22,4 +22,8 @@ public class BudgetsController : BaseApiController
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult<bool>> Delete(Guid id)
         => await Mediator.Send(new DeleteBudgetCommand(id));
+
+    [HttpPost("copy")]
+    public async Task<ActionResult<bool>> CopyPreviousMonth([FromQuery] int targetMonth, [FromQuery] int targetYear)
+        => await Mediator.Send(new CopyPreviousMonthBudgetsCommand(targetMonth, targetYear));
 }

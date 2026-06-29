@@ -38,12 +38,20 @@ public class CreateBudgetCommandHandler(
         await context.Budgets.AddAsync(budget, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
 
+        // Real-time calculation of SpentAmount from Transactions
+        var spentAmount = await context.Transactions
+            .Where(t => t.AccountId != null && t.CategoryId == budget.CategoryId 
+                   && t.TransactionDate.Month == budget.Month 
+                   && t.TransactionDate.Year == budget.Year 
+                   && t.Type == Domain.Enums.TransactionType.Expense)
+            .SumAsync(t => t.Amount, cancellationToken);
+
         var category = await context.Categories.FindAsync([budget.CategoryId], cancellationToken);
         var catDto = new CategoryDto(category!.Id, category.Name, category.Type, category.Icon, category.Color, category.IsSystem);
-        var remaining = budget.LimitAmount - budget.SpentAmount;
-        var pct = budget.LimitAmount > 0 ? (double)budget.SpentAmount / (double)budget.LimitAmount * 100 : 0;
+        var remaining = budget.LimitAmount - spentAmount;
+        var pct = budget.LimitAmount > 0 ? (double)spentAmount / (double)budget.LimitAmount * 100 : 0;
 
-        return new BudgetDto(budget.Id, catDto, budget.LimitAmount, budget.SpentAmount, remaining, budget.Month, budget.Year, pct);
+        return new BudgetDto(budget.Id, catDto, budget.LimitAmount, spentAmount, remaining, budget.Month, budget.Year, pct);
     }
 }
 
@@ -64,9 +72,18 @@ public class UpdateBudgetCommandHandler(
         await context.SaveChangesAsync(cancellationToken);
 
         var catDto = new CategoryDto(budget.Category.Id, budget.Category.Name, budget.Category.Type, budget.Category.Icon, budget.Category.Color, budget.Category.IsSystem);
-        var remaining = budget.LimitAmount - budget.SpentAmount;
-        var pct = budget.LimitAmount > 0 ? (double)budget.SpentAmount / (double)budget.LimitAmount * 100 : 0;
-        return new BudgetDto(budget.Id, catDto, budget.LimitAmount, budget.SpentAmount, remaining, budget.Month, budget.Year, pct);
+        
+        // Real-time calculation of SpentAmount from Transactions
+        var spentAmount = await context.Transactions
+            .Where(t => t.AccountId != null && t.CategoryId == budget.CategoryId 
+                   && t.TransactionDate.Month == budget.Month 
+                   && t.TransactionDate.Year == budget.Year 
+                   && t.Type == Domain.Enums.TransactionType.Expense)
+            .SumAsync(t => t.Amount, cancellationToken);
+            
+        var remaining = budget.LimitAmount - spentAmount;
+        var pct = budget.LimitAmount > 0 ? (double)spentAmount / (double)budget.LimitAmount * 100 : 0;
+        return new BudgetDto(budget.Id, catDto, budget.LimitAmount, spentAmount, remaining, budget.Month, budget.Year, pct);
     }
 }
 
@@ -87,3 +104,50 @@ public class DeleteBudgetCommandHandler(
         return true;
     }
 }
+
+public record CopyPreviousMonthBudgetsCommand(int TargetMonth, int TargetYear) : IRequest<bool>;
+
+public class CopyPreviousMonthBudgetsCommandHandler(
+    IApplicationDbContext context,
+    ICurrentUserService currentUser) : IRequestHandler<CopyPreviousMonthBudgetsCommand, bool>
+{
+    public async Task<bool> Handle(CopyPreviousMonthBudgetsCommand request, CancellationToken cancellationToken)
+    {
+        var userId = currentUser.UserId!.Value;
+        
+        int prevMonth = request.TargetMonth == 1 ? 12 : request.TargetMonth - 1;
+        int prevYear = request.TargetMonth == 1 ? request.TargetYear - 1 : request.TargetYear;
+
+        var prevBudgets = await context.Budgets
+            .Where(b => b.UserId == userId && b.Month == prevMonth && b.Year == prevYear)
+            .ToListAsync(cancellationToken);
+
+        if (!prevBudgets.Any()) return false;
+
+        var currentBudgets = await context.Budgets
+            .Where(b => b.UserId == userId && b.Month == request.TargetMonth && b.Year == request.TargetYear)
+            .Select(b => b.CategoryId)
+            .ToListAsync(cancellationToken);
+
+        var newBudgets = prevBudgets
+            .Where(b => !currentBudgets.Contains(b.CategoryId))
+            .Select(b => new Budget
+            {
+                UserId = userId,
+                CategoryId = b.CategoryId,
+                LimitAmount = b.LimitAmount,
+                SpentAmount = 0,
+                Month = request.TargetMonth,
+                Year = request.TargetYear
+            }).ToList();
+
+        if (newBudgets.Any())
+        {
+            await context.Budgets.AddRangeAsync(newBudgets, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
+        }
+
+        return true;
+    }
+}
+
