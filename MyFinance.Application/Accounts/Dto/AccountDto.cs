@@ -24,4 +24,5 @@ public record CreateAccountRequest(
 public record UpdateAccountRequest(
     string Name,
     string Color,
-    string Icon);
+    string Icon,
+    bool IsDefault);
