@@ -2,6 +2,7 @@ using MyFinance.Application;
 using MyFinance.Infrastructure;
 using Scalar.AspNetCore;
 using MyFinance.WebApi.Middleware;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,18 @@ app.MapScalarApiReference(options =>
 });
 
 app.UseHttpsRedirection();
+
+var webRootPath = builder.Environment.WebRootPath ?? Path.Combine(builder.Environment.ContentRootPath, "wwwroot");
+if (!Directory.Exists(webRootPath))
+{
+    Directory.CreateDirectory(webRootPath);
+}
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(webRootPath),
+    RequestPath = ""
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

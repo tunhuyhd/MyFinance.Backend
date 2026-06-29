@@ -24,6 +24,9 @@ public class User : AuditableEntity, IAggregateRoot
     [Column("refresh_token_expiry_time")]
     public DateTime? RefreshTokenExpiryTime { get; set; }
 
+    [Column("avatar_url")]
+    public string? AvatarUrl { get; set; }
+
     public ICollection<Account> Accounts { get; set; } = new List<Account>();
     public ICollection<Category> Categories { get; set; } = new List<Category>();
     public ICollection<Budget> Budgets { get; set; } = new List<Budget>();

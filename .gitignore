@@ -52,3 +52,7 @@ appsettings.Development.json
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Uploaded files
+**/wwwroot/avatars/*
+!**/wwwroot/avatars/.gitkeep
