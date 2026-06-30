@@ -18,6 +18,6 @@ public class GetCurrentUserQueryHandler(
             .FirstOrDefaultAsync(u => u.Id == currentUser.UserId, cancellationToken)
             ?? throw new NotFoundException(nameof(Domain.Entities.User), currentUser.UserId!);
 
-        return new UserDto(user.Id, user.Username, user.Email, user.FullName, user.AvatarUrl);
+        return new UserDto(user.Id, user.Username, user.Email, user.FullName, user.AvatarUrl, user.IsAdmin);
     }
 }

@@ -21,6 +21,6 @@ public class UpdateAvatarUrlCommandHandler(
         user.AvatarUrl = request.AvatarUrl;
         await context.SaveChangesAsync(cancellationToken);
 
-        return new UserDto(user.Id, user.Username, user.Email, user.FullName, user.AvatarUrl);
+        return new UserDto(user.Id, user.Username, user.Email, user.FullName, user.AvatarUrl, user.IsAdmin);
     }
 }

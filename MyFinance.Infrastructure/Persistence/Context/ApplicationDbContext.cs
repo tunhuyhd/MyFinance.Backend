@@ -85,6 +85,20 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
         // Seed system categories
         SeedSystemCategories(modelBuilder);
+        
+        // Seed Admin user
+        var adminId = Guid.Parse("00000000-0000-0000-0000-000000000001");
+        modelBuilder.Entity<User>().HasData(new User
+        {
+            Id = adminId,
+            Username = "admin",
+            Email = "admin@myfinance.local",
+            PasswordHash = "$2a$11$KvCWuCbUfdprIh5NNvPOYuNRDBiLiBRbwJ3BfFemiNhF7aFXQWbmC",
+            FullName = "System Administrator",
+            IsAdmin = true,
+            CreatedOn = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            CreatedBy = Guid.Empty
+        });
 
         // UTC DateTime converter for PostgreSQL
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())

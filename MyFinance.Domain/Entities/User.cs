@@ -27,6 +27,9 @@ public class User : AuditableEntity, IAggregateRoot
     [Column("avatar_url")]
     public string? AvatarUrl { get; set; }
 
+    [Column("is_admin")]
+    public bool IsAdmin { get; set; } = false;
+
     public ICollection<Account> Accounts { get; set; } = new List<Account>();
     public ICollection<Category> Categories { get; set; } = new List<Category>();
     public ICollection<Budget> Budgets { get; set; } = new List<Budget>();

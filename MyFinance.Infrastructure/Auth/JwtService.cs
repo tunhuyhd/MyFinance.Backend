@@ -23,6 +23,11 @@ public class JwtService(IConfiguration configuration) : IJwtService
             new(ClaimTypes.Email, user.Email),
         };
 
+        if (user.IsAdmin)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+        }
+
         var token = new JwtSecurityToken(
             issuer: jwtSettings["Issuer"],
             audience: jwtSettings["Audience"],
