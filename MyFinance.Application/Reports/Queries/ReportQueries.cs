@@ -103,3 +103,36 @@ public class GetMonthlyReportQueryHandler(
             .ToList();
     }
 }
+
+// Category Expense Report for a selected month
+public record GetCategoryExpenseReportQuery(int Month, int Year) : IRequest<List<CategorySummaryDto>>;
+
+public class GetCategoryExpenseReportQueryHandler(
+    IApplicationDbContext context,
+    ICurrentUserService currentUser) : IRequestHandler<GetCategoryExpenseReportQuery, List<CategorySummaryDto>>
+{
+    public async Task<List<CategorySummaryDto>> Handle(GetCategoryExpenseReportQuery request, CancellationToken cancellationToken)
+    {
+        var userId = currentUser.UserId!.Value;
+        var from = new DateTime(request.Year, request.Month, 1);
+        var to = from.AddMonths(1);
+
+        var transactions = await context.Transactions
+            .Include(t => t.Category)
+            .Where(t => t.UserId == userId && t.TransactionDate >= from && t.TransactionDate < to
+                && t.Type == TransactionType.Expense && t.Category != null)
+            .ToListAsync(cancellationToken);
+
+        var totalExpense = transactions.Sum(t => t.Amount);
+
+        var expenseByCategory = transactions
+            .GroupBy(t => new { t.Category!.Name, t.Category.Color, t.Category.Icon })
+            .Select(g => new { g.Key.Name, g.Key.Color, g.Key.Icon, Total = g.Sum(x => x.Amount) })
+            .OrderByDescending(x => x.Total)
+            .ToList();
+
+        return expenseByCategory.Select(c => new CategorySummaryDto(
+            c.Name, c.Color, c.Icon, c.Total,
+            totalExpense > 0 ? (double)c.Total / (double)totalExpense * 100 : 0)).ToList();
+    }
+}

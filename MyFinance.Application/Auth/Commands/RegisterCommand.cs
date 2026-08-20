@@ -64,7 +64,7 @@ public class RegisterCommandHandler(
         var refreshToken = jwtService.GenerateRefreshToken();
 
         user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30);
         await context.SaveChangesAsync(cancellationToken);
 
         return new AuthResponse(token, refreshToken, user.Username, user.Id);

@@ -20,13 +20,13 @@ public class RefreshTokenCommandHandler(
             throw new UnauthorizedAccessException("Invalid or expired refresh token.");
 
         var newToken = jwtService.GenerateToken(user);
-        var newRefreshToken = jwtService.GenerateRefreshToken();
 
-        user.RefreshToken = newRefreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        // Keep this token stable and slide its expiration. Rotating on every call
+        // makes concurrent requests and browser tabs invalidate each other.
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30);
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return new AuthResponse(newToken, newRefreshToken, user.Username, user.Id);
+        return new AuthResponse(newToken, user.RefreshToken!, user.Username, user.Id);
     }
 }

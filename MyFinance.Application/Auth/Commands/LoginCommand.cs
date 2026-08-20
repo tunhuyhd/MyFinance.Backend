@@ -24,7 +24,7 @@ public class LoginCommandHandler(
         var refreshToken = jwtService.GenerateRefreshToken();
 
         user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30);
 
         await context.SaveChangesAsync(cancellationToken);
 

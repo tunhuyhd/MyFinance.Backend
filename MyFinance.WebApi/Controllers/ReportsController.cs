@@ -15,4 +15,8 @@ public class ReportsController : BaseApiController
     [HttpGet("monthly")]
     public async Task<ActionResult<List<MonthlyReportDto>>> GetMonthly()
         => await Mediator.Send(new GetMonthlyReportQuery());
+
+    [HttpGet("category-expenses")]
+    public async Task<ActionResult<List<CategorySummaryDto>>> GetCategoryExpenses([FromQuery] int month, [FromQuery] int year)
+        => await Mediator.Send(new GetCategoryExpenseReportQuery(month, year));
 }
